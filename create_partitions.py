@@ -20,8 +20,8 @@ def create_partitions(G, k, p):
                 smallest = float('inf')
                 index = -1
                 for l in range(k):
-                    for j in G[p[i]]:
-                        if j in partitions[l]:
+                    for j in range(n):
+                        if G[p[i]][j] == 1 and j in partitions[l]:
                             if len(partitions[l]) < smallest:
                                 smallest = len(partitions[l])
                                 index = l
@@ -33,7 +33,13 @@ def create_partitions(G, k, p):
     return partitions
 
 def main(args):
-    G = [[1,2,3],[0,7,8],[0,3,7],[0,2,4,5],[3,5],[3,4,7],[7,8,10],[1,2,5,6],[1,6,9],[8,11],[6,11],[9,10]]
+    G = [[0 for j in range(12)] for i in range(12)]
+    X = [[1,2,3],[0,7,8],[0,3,7],[0,2,4,5],[3,5],[3,4,7],[7,8,10],[1,2,5,6],[1,6,9],[8,11],[6,11],[9,10]]
+    i = 0
+    for l in X:
+        for j in l:
+            G[i][j] = 1
+        i += 1
     k = 3
     p = (6,5,2,9,4,0,10,8,3,11,7,1)
     print create_partitions(G, k, p)
