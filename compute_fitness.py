@@ -6,10 +6,10 @@
 from create_partitions import create_partitions
 
 def compute_fitness(G, k, P):
-    fitness = {}
+    fitness = []
     for p in P:
         parts = create_partitions(G, k, p)
-        fitness[p] = float(k) * max([len(part) for part in parts]) / len(G)
+        fitness.append((p, float(k) * max([len(part) for part in parts]) / len(G)))
     return fitness
 
 def main(args):
