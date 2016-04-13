@@ -5,7 +5,7 @@
 
 import random
 
-from compute_fitness import compute_fitness
+from compute_fitness import compute_fitness, weight_part
 from crossover import crossover
 from create_partitions import create_partitions
 
@@ -27,15 +27,15 @@ def driver(G, k, MAX_GEN):
     return create_partitions(G, k, p)
 
 def main(args):
-    G = [[0 for j in range(12)] for i in range(12)]
-    X = [[1,2,3],[0,7,8],[0,3,7],[0,2,4,5],[3,5],[3,4,7],[7,8,10],[1,2,5,6],[1,6,9],[8,11],[6,11],[9,10]]
-    i = 0
-    for l in X:
-        for j in l:
-            G[i][j] = 1
-        i += 1
-    k = 3
-    print driver(G, k, 500)
+    #f = open('ConnectivityGraph.txt', 'r')
+    #G = [ map(int,line.split(' ')) for line in f ]
+    #k = 10
+    G = [[0, 2, 0, 5, 0, 0], [2, 0, 3, 0, 1, 0], [0, 3, 0, 4, 0, 0], [5, 0, 4, 0, 0, 0], [0, 1, 0, 0, 0, 1], [0, 0, 0, 0, 1, 0]]
+    k = 2
+    partitions = driver(G, k, 500)
+    print partitions
+    print weight_part(partitions[0], G)
+    print weight_part(partitions[1], G)
     return 0
 
 if __name__ == '__main__':

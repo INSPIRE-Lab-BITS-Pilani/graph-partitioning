@@ -9,8 +9,17 @@ def compute_fitness(G, k, P):
     fitness = []
     for p in P:
         parts = create_partitions(G, k, p)
-        fitness.append((p, float(k) * max([len(part) for part in parts]) / len(G)))
+        wp = [weight_part(part, G) for part in parts]
+        fitness.append((p, max(wp) - min(wp)))
     return fitness
+
+def weight_part(part, G):
+    w = 0
+    for i in part:
+        for j in part:
+            if G[i][j] > 0:
+                w += G[i][j]
+    return w
 
 def main(args):
     G = [[0 for j in range(12)] for i in range(12)]

@@ -21,7 +21,7 @@ def create_partitions(G, k, p):
                 index = -1
                 for l in range(k):
                     for j in range(n):
-                        if G[p[i]][j] == 1 and j in partitions[l]:
+                        if G[p[i]][j] > 0 and j in partitions[l]:
                             if len(partitions[l]) < smallest:
                                 smallest = len(partitions[l])
                                 index = l
