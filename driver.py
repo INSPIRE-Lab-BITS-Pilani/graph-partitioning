@@ -5,11 +5,11 @@
 
 import random
 
-from compute_fitness import compute_fitness, weight_part
+from compute_fitness import compute_fitness
 from crossover import crossover
-from create_partitions import create_partitions
+from create_partitions import create_partitions, weight_part
 
-def driver(G, k, MAX_GEN):
+def driver(G, W, k, MAX_GEN):
     n = len(G)
     P = []
     for i in range(2*n):
@@ -17,25 +17,28 @@ def driver(G, k, MAX_GEN):
         random.shuffle(temp)
         P.append(tuple(temp))
     for i in range(MAX_GEN):
-        fitness = compute_fitness(G, k, P)
+        fitness = compute_fitness(G, W, k, P)
         fitness.sort(key=lambda tup: tup[1])
         P = [fitness[j][0] for j in range(n)]
         P = crossover(P, k, n)
-    fitness = compute_fitness(G, k, P)
+    fitness = compute_fitness(G, W, k, P)
     fitness.sort(key=lambda tup: tup[1])
     p = fitness[0][0]
-    return create_partitions(G, k, p)
+    return create_partitions(G, W, k, p)
 
 def main(args):
-    #f = open('ConnectivityGraph.txt', 'r')
-    #G = [ map(int,line.split(' ')) for line in f ]
-    #k = 10
-    G = [[0, 2, 0, 5, 0, 0], [2, 0, 3, 0, 1, 0], [0, 3, 0, 4, 0, 0], [5, 0, 4, 0, 0, 0], [0, 1, 0, 0, 0, 1], [0, 0, 0, 0, 1, 0]]
+    if len(args) != 3:
+        print "Usage: python2 driver.py <graphFile> <vertexWeightsFile>"
+        return -1
+    f = open(args[1], 'r')
+    G = [ map(int,line.split(' ')) for line in f ]
+    f1 = open('VertexWeights.txt', 'r')
+    W = [int(line) for line in f1]
     k = 2
-    partitions = driver(G, k, 500)
+    partitions = driver(G, W, k, 500)
     print partitions
-    print weight_part(partitions[0], G)
-    print weight_part(partitions[1], G)
+    print weight_part(partitions[0], W)
+    print weight_part(partitions[1], W)
     return 0
 
 if __name__ == '__main__':

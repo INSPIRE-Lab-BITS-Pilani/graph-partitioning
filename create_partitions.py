@@ -3,7 +3,7 @@
 #
 #  create_partitions.py
 
-def create_partitions(G, k, p):
+def create_partitions(G, W, k, p):
     partitions = []
     free = []
     n = len(p)
@@ -22,8 +22,8 @@ def create_partitions(G, k, p):
                 for l in range(k):
                     for j in range(n):
                         if G[p[i]][j] > 0 and j in partitions[l]:
-                            if len(partitions[l]) < smallest:
-                                smallest = len(partitions[l])
+                            if weight_part(partitions[l], W) < smallest:
+                                smallest = weight_part(partitions[l], W)
                                 index = l
                 if index == -1:
                     someFree = True
@@ -31,6 +31,12 @@ def create_partitions(G, k, p):
                     partitions[index].append(p[i])
                     free[i] = False
     return partitions
+
+def weight_part(part, W):
+    w = 0
+    for i in part:
+        w += W[i]
+    return w
 
 def main(args):
     G = [[0 for j in range(12)] for i in range(12)]
@@ -42,7 +48,7 @@ def main(args):
         i += 1
     k = 3
     p = (6,5,2,9,4,0,10,8,3,11,7,1)
-    print create_partitions(G, k, p)
+    #print create_partitions(G, k, p)
     return 0
 
 if __name__ == '__main__':

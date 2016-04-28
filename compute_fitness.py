@@ -3,23 +3,15 @@
 #
 #  compute_fitness.py
 
-from create_partitions import create_partitions
+from create_partitions import create_partitions, weight_part
 
-def compute_fitness(G, k, P):
+def compute_fitness(G, W, k, P):
     fitness = []
     for p in P:
-        parts = create_partitions(G, k, p)
-        wp = [weight_part(part, G) for part in parts]
+        parts = create_partitions(G, W, k, p)
+        wp = [weight_part(part, W) for part in parts]
         fitness.append((p, max(wp) - min(wp)))
     return fitness
-
-def weight_part(part, G):
-    w = 0
-    for i in part:
-        for j in part:
-            if G[i][j] > 0:
-                w += G[i][j]
-    return w
 
 def main(args):
     G = [[0 for j in range(12)] for i in range(12)]
@@ -31,7 +23,7 @@ def main(args):
         i += 1
     k = 3
     P = [(6,5,2,9,4,0,10,8,3,11,7,1)]
-    print compute_fitness(G, k, P)
+    #print compute_fitness(G, k, P)
     return 0
 
 if __name__ == '__main__':
