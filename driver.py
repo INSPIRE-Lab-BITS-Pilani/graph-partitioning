@@ -7,7 +7,10 @@ import random
 
 from compute_fitness import compute_fitness
 from crossover import crossover
-from create_partitions import create_partitions, weight_part
+from create_partitions import create_partitions
+from Tkinter import Tk, Label, Entry, Button, END, mainloop
+from tkFileDialog import askopenfilename
+from tkMessageBox import showerror, showinfo
 
 def driver(G, W, k, MAX_GEN):
     n = len(G)
@@ -26,21 +29,52 @@ def driver(G, W, k, MAX_GEN):
     p = fitness[0][0]
     return create_partitions(G, W, k, p)
 
-def main(args):
-    if len(args) != 3:
-        print "Usage: python2 driver.py <graphFile> <vertexWeightsFile>"
-        return -1
-    f = open(args[1], 'r')
-    G = [ map(int,line.split(' ')) for line in f ]
-    f1 = open('VertexWeights.txt', 'r')
-    W = [int(line) for line in f1]
-    k = 2
-    partitions = driver(G, W, k, 500)
-    print partitions
-    print weight_part(partitions[0], W)
-    print weight_part(partitions[1], W)
-    return 0
+def fileChoose():
+    filename = askopenfilename()
+    if filename:
+        b1.config(text = filename)
 
-if __name__ == '__main__':
-    import sys
-    sys.exit(main(sys.argv))
+def fileChoose1():
+    filename1 = askopenfilename()
+    if filename1:
+        b2.config(text = filename1)
+
+def doIt():
+    if b1["text"] == "Choose":
+        showerror("No File", "Please choose a valid graph file first!")
+        return
+    elif b2["text"] == "Choose":
+        showerror("No File", "Please choose a valid vertex weights file first!")
+        return
+    G = [ map(int,line.split(' ')) for line in open(b1["text"], 'r') ]
+    W = [int(line) for line in open(b2["text"], 'r')]
+    k = int(e1.get())
+    MAX_GEN = int(e2.get())
+    partitions = driver(G, W, k, MAX_GEN)
+    outfile = open(b1["text"][0 : b1["text"].find('.')] + "_" + str(k) + "_"
+                    + str(MAX_GEN) + "_out.txt", 'w')
+    outfile.write(str(partitions) + '\n')
+    showinfo("Obtained Partition", "Answer has been written to " + outfile.name)
+
+master = Tk()
+master.title("Graph Partitioning")
+Label(master, text = "Graph file").grid(row = 0)
+Label(master, text = "Vertex weights file").grid(row = 1)
+Label(master, text = "Number of subgraphs").grid(row = 2)
+Label(master, text = "Max generations").grid(row = 3)
+
+b1 = Button(text = "Choose", command = fileChoose)
+b2 = Button(text = "Choose", command = fileChoose1)
+e1 = Entry(master)
+e1.insert(END, 2)
+e2 = Entry(master)
+e2.insert(END, 500)
+b3 = Button(text = "Compute", command = doIt).grid(row = 4, column = 0)
+b4 = Button(text = "Quit", command = master.quit).grid(row = 4, column = 1)
+
+b1.grid(row = 0, column = 1)
+b2.grid(row = 1, column = 1)
+e1.grid(row = 2, column = 1)
+e2.grid(row = 3, column = 1)
+
+mainloop()
