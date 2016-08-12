@@ -51,7 +51,7 @@ def doIt():
     k = int(e1.get())
     MAX_GEN = int(e2.get())
     partitions = driver(G, W, k, MAX_GEN)
-    outfile = open(b1["text"][0 : b1["text"].find('.')] + "_" + str(k) + "_"
+    outfile = open(b1["text"][0 : b1["text"].rfind('.')] + "_" + str(k) + "_"
                     + str(MAX_GEN) + "_out.txt", 'w')
     outfile.write(str(partitions) + '\n')
     showinfo("Obtained Partition", "Answer has been written to " + outfile.name)
